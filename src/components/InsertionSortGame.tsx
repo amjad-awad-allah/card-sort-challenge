@@ -56,20 +56,20 @@ export const InsertionSortGame = () => {
         </div>
       )}
 
-      {/* Cards Area */}
-      <div className="mb-8">
+      {/* Cards Area - Full Width Single Row */}
+      <div className="mb-8 w-full">
         <div 
-          className="relative mx-auto max-w-4xl min-h-[200px] p-6 sm:p-8 rounded-3xl bg-felt/30 backdrop-blur-sm border border-border/30"
+          className="relative w-full min-h-[180px] p-4 sm:p-6 rounded-3xl bg-felt/30 backdrop-blur-sm border border-border/30"
           style={{
             background: 'radial-gradient(ellipse at center, hsl(160 40% 15% / 0.5) 0%, transparent 70%)',
           }}
         >
-          {/* Cards Container */}
-          <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-4 md:gap-5">
+          {/* Cards Container - Single Row */}
+          <div className="flex justify-center items-center gap-2 sm:gap-3 md:gap-4 w-full overflow-x-auto py-2">
             {cards.map((card, index) => (
               <div
                 key={card.id}
-                className="transition-all duration-300 ease-out"
+                className="flex-shrink-0 transition-all duration-300 ease-out"
                 style={{
                   transform: hasStarted ? 'none' : `translateY(${Math.sin(index * 0.5) * 10}px)`,
                 }}
