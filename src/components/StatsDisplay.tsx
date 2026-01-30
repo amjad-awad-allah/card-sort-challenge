@@ -11,15 +11,15 @@ export const StatsDisplay = ({ steps, comparisons, isComplete }: StatsDisplayPro
     <div className="flex flex-wrap justify-center gap-4">
       <div className="stats-badge">
         <Footprints className="w-4 h-4 text-primary" />
-        <span>الخطوات: {steps}</span>
+        <span>Schritte: {steps}</span>
       </div>
       <div className="stats-badge">
-        <span>🔄 المقارنات: {comparisons}</span>
+        <span>🔄 Vergleiche: {comparisons}</span>
       </div>
       {isComplete && (
         <div className="stats-badge bg-secondary/30 border-secondary/50 animate-success">
           <Trophy className="w-4 h-4 text-secondary" />
-          <span>🎉 تم الترتيب!</span>
+          <span>🎉 Sortiert!</span>
         </div>
       )}
     </div>

@@ -2,11 +2,11 @@ import { BookOpen, ArrowRight } from 'lucide-react';
 
 export const ExplanationSection = () => {
   return (
-    <div className="max-w-3xl mx-auto mt-12 animate-slide-up" dir="rtl">
+    <div className="max-w-3xl mx-auto mt-12 animate-slide-up">
       <div className="tip-card">
         <div className="flex items-center gap-3 mb-6">
           <BookOpen className="w-6 h-6 text-primary" />
-          <h2 className="text-xl font-bold text-primary">📘 كيف تعمل خوارزمية Insertion Sort؟</h2>
+          <h2 className="text-xl font-bold text-primary">📘 Wie funktioniert der Insertion Sort Algorithmus?</h2>
         </div>
         
         <div className="space-y-4 text-foreground/90">
@@ -15,8 +15,8 @@ export const ExplanationSection = () => {
               1
             </div>
             <div>
-              <p className="font-semibold">نبني جزءاً مرتّباً تدريجياً</p>
-              <p className="text-muted-foreground text-sm">نبدأ بافتراض أن الكرت الأول مرتّب</p>
+              <p className="font-semibold">Wir bauen schrittweise einen sortierten Bereich auf</p>
+              <p className="text-muted-foreground text-sm">Wir beginnen mit der Annahme, dass die erste Karte bereits sortiert ist</p>
             </div>
           </div>
 
@@ -25,8 +25,8 @@ export const ExplanationSection = () => {
               2
             </div>
             <div>
-              <p className="font-semibold">نأخذ الكرت التالي</p>
-              <p className="text-muted-foreground text-sm">ننظر إلى الكرت الجديد ونقارنه بالكروت المرتّبة</p>
+              <p className="font-semibold">Wir nehmen die nächste Karte</p>
+              <p className="text-muted-foreground text-sm">Wir betrachten die neue Karte und vergleichen sie mit den sortierten Karten</p>
             </div>
           </div>
 
@@ -35,8 +35,8 @@ export const ExplanationSection = () => {
               3
             </div>
             <div>
-              <p className="font-semibold">نُدرجه في مكانه الصحيح</p>
-              <p className="text-muted-foreground text-sm">نُزيح الكروت الأكبر منه ونضعه في موقعه المناسب</p>
+              <p className="font-semibold">Wir fügen sie an der richtigen Stelle ein</p>
+              <p className="text-muted-foreground text-sm">Wir verschieben größere Karten und platzieren sie an der passenden Position</p>
             </div>
           </div>
 
@@ -45,18 +45,18 @@ export const ExplanationSection = () => {
               ✓
             </div>
             <div>
-              <p className="font-semibold">نكرّر حتى تنتهي كل الكروت</p>
-              <p className="text-muted-foreground text-sm">وهكذا نحصل على ترتيب تصاعدي كامل!</p>
+              <p className="font-semibold">Wir wiederholen, bis alle Karten sortiert sind</p>
+              <p className="text-muted-foreground text-sm">So erhalten wir eine vollständig aufsteigende Sortierung!</p>
             </div>
           </div>
         </div>
 
         <div className="mt-6 p-4 rounded-xl bg-muted/50 border border-border/30">
           <p className="text-sm text-muted-foreground flex items-center gap-2 justify-center">
-            <ArrowRight className="w-4 h-4 rotate-180" />
-            التعقيد الزمني: O(n²) في أسوأ الحالات
+            <ArrowRight className="w-4 h-4" />
+            Zeitkomplexität: O(n²) im schlimmsten Fall
             <span className="mx-2">|</span>
-            مناسب للقوائم الصغيرة والقوائم شبه المرتّبة
+            Geeignet für kleine und fast sortierte Listen
           </p>
         </div>
       </div>
