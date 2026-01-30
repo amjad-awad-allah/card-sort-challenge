@@ -2,95 +2,68 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Insertion Sort Card Game - Design System */
+
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Game Background - Deep blue to black gradient */
+    --background: 222 47% 8%;
+    --foreground: 45 29% 97%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Cards */
+    --card: 45 29% 97%;
+    --card-foreground: 222 47% 11%;
+    --card-shadow: 222 47% 5%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* Game Accents */
+    --primary: 45 93% 58%;
+    --primary-foreground: 222 47% 11%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --secondary: 160 84% 39%;
+    --secondary-foreground: 45 29% 97%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 222 30% 18%;
+    --muted-foreground: 222 20% 55%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 354 70% 54%;
+    --accent-foreground: 45 29% 97%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* UI Elements */
+    --popover: 222 47% 11%;
+    --popover-foreground: 45 29% 97%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --border: 222 30% 25%;
+    --input: 222 30% 18%;
+    --ring: 45 93% 58%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 45 29% 97%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
-    --sidebar-background: 0 0% 98%;
+    /* Game-specific tokens */
+    --glow-gold: 45 93% 58%;
+    --glow-green: 160 84% 39%;
+    --glow-red: 354 70% 54%;
+    --card-cream: 45 29% 97%;
+    --felt-green: 160 40% 25%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Sidebar defaults */
+    --sidebar-background: 222 47% 11%;
+    --sidebar-foreground: 45 29% 97%;
+    --sidebar-primary: 45 93% 58%;
+    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-accent: 222 30% 18%;
+    --sidebar-accent-foreground: 45 29% 97%;
+    --sidebar-border: 222 30% 25%;
+    --sidebar-ring: 45 93% 58%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --background: 222 47% 8%;
+    --foreground: 45 29% 97%;
   }
 }
 
@@ -99,7 +72,169 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html {
+    font-family: 'Cairo', sans-serif;
+  }
+
   body {
     @apply bg-background text-foreground;
+    background: linear-gradient(135deg, 
+      hsl(222 47% 8%) 0%, 
+      hsl(222 60% 5%) 50%,
+      hsl(240 40% 3%) 100%);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  /* Card Glow Effects */
+  .card-glow-gold {
+    box-shadow: 
+      0 0 20px hsl(var(--glow-gold) / 0.4),
+      0 0 40px hsl(var(--glow-gold) / 0.2),
+      0 8px 32px hsl(var(--card-shadow) / 0.5);
+  }
+
+  .card-glow-green {
+    box-shadow: 
+      0 0 15px hsl(var(--glow-green) / 0.3),
+      0 8px 32px hsl(var(--card-shadow) / 0.4);
+  }
+
+  .card-glow-muted {
+    box-shadow: 
+      0 4px 16px hsl(var(--card-shadow) / 0.3);
+  }
+
+  /* Card Animations */
+  @keyframes card-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+  }
+
+  @keyframes card-shake {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    25% { transform: translateX(-3px) rotate(-1deg); }
+    75% { transform: translateX(3px) rotate(1deg); }
+  }
+
+  @keyframes card-insert {
+    0% { transform: translateY(-20px) scale(1.1); opacity: 0.8; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+  }
+
+  @keyframes card-slide {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(var(--slide-distance, 80px)); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes confetti-fall {
+    0% { transform: translateY(-100%) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  @keyframes success-glow {
+    0%, 100% { box-shadow: 0 0 20px hsl(var(--glow-green) / 0.5); }
+    50% { box-shadow: 0 0 40px hsl(var(--glow-green) / 0.8), 0 0 60px hsl(var(--glow-green) / 0.4); }
+  }
+
+  .animate-pulse-card {
+    animation: card-pulse 1.5s ease-in-out infinite;
+  }
+
+  .animate-shake {
+    animation: card-shake 0.5s ease-in-out infinite;
+  }
+
+  .animate-insert {
+    animation: card-insert 0.4s ease-out;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-success {
+    animation: success-glow 1s ease-in-out infinite;
+  }
+
+  /* Game Button Styles */
+  .game-btn {
+    @apply relative overflow-hidden font-semibold px-6 py-3 rounded-xl transition-all duration-300;
+    @apply bg-gradient-to-br from-primary to-primary/80;
+    @apply text-primary-foreground;
+    @apply hover:scale-105 hover:shadow-lg;
+    @apply active:scale-95;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100;
+  }
+
+  .game-btn-secondary {
+    @apply game-btn;
+    @apply bg-gradient-to-br from-secondary to-secondary/80;
+    @apply text-secondary-foreground;
+  }
+
+  .game-btn-accent {
+    @apply game-btn;
+    @apply bg-gradient-to-br from-accent to-accent/80;
+    @apply text-accent-foreground;
+  }
+
+  .game-btn-ghost {
+    @apply game-btn;
+    @apply bg-muted/50 backdrop-blur-sm;
+    @apply text-foreground;
+    @apply hover:bg-muted;
+  }
+
+  /* Tip Card */
+  .tip-card {
+    @apply relative p-6 rounded-2xl;
+    @apply bg-gradient-to-br from-muted/80 to-muted/40;
+    @apply backdrop-blur-md border border-border/50;
+    @apply text-foreground;
+  }
+
+  /* Playing Card Base */
+  .playing-card {
+    @apply relative flex flex-col items-center justify-center;
+    @apply w-20 h-28 sm:w-24 sm:h-32 md:w-28 md:h-36;
+    @apply rounded-xl;
+    @apply bg-gradient-to-br from-card to-card/95;
+    @apply border-2 border-card/80;
+    @apply transition-all duration-300 ease-out;
+    @apply cursor-pointer select-none;
+    font-family: 'Georgia', serif;
+  }
+
+  /* Stats Display */
+  .stats-badge {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full;
+    @apply bg-muted/60 backdrop-blur-sm border border-border/50;
+    @apply text-sm font-semibold text-foreground;
+  }
+}
+
+@layer utilities {
+  .text-shadow-glow {
+    text-shadow: 0 0 20px hsl(var(--primary) / 0.5);
+  }
+
+  .bg-game-gradient {
+    background: linear-gradient(135deg, 
+      hsl(222 47% 8%) 0%, 
+      hsl(222 60% 5%) 50%,
+      hsl(240 40% 3%) 100%);
+  }
+
+  .bg-felt {
+    background: radial-gradient(ellipse at center, 
+      hsl(var(--felt-green)) 0%, 
+      hsl(160 40% 18%) 100%);
   }
 }
