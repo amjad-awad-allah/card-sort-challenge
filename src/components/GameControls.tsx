@@ -30,7 +30,7 @@ export const GameControls = ({
           className="game-btn flex items-center gap-2 text-lg"
         >
           <Play className="w-5 h-5" />
-          <span>🎴 ابدأ اللعبة</span>
+          <span>🎴 Spiel starten</span>
         </button>
       ) : (
         <>
@@ -40,7 +40,7 @@ export const GameControls = ({
             className="game-btn-ghost flex items-center gap-2"
           >
             <SkipForward className="w-5 h-5" />
-            <span>👆 الخطوة التالية</span>
+            <span>👆 Nächster Schritt</span>
           </button>
 
           <button
@@ -54,12 +54,12 @@ export const GameControls = ({
             {isAutoPlaying ? (
               <>
                 <Pause className="w-5 h-5" />
-                <span>إيقاف</span>
+                <span>Stopp</span>
               </>
             ) : (
               <>
                 <Zap className="w-5 h-5" />
-                <span>⚡ تشغيل تلقائي</span>
+                <span>⚡ Auto-Modus</span>
               </>
             )}
           </button>
@@ -69,7 +69,7 @@ export const GameControls = ({
             className="game-btn-ghost flex items-center gap-2"
           >
             <RotateCcw className="w-5 h-5" />
-            <span>🔄 إعادة</span>
+            <span>🔄 Neustart</span>
           </button>
         </>
       )}

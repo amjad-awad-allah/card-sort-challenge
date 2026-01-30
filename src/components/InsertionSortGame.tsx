@@ -23,7 +23,7 @@ export const InsertionSortGame = () => {
   } = useInsertionSort(7);
 
   return (
-    <div className="min-h-screen py-8 px-4" dir="rtl">
+    <div className="min-h-screen py-8 px-4">
       <ConfettiEffect isActive={isComplete} />
       
       {/* Header */}
@@ -31,12 +31,12 @@ export const InsertionSortGame = () => {
         <div className="inline-flex items-center gap-3 mb-4">
           <Sparkles className="w-8 h-8 text-primary" />
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-shadow-glow text-foreground">
-            لعبة Insertion Sort
+            Insertion Sort Spiel
           </h1>
           <Sparkles className="w-8 h-8 text-primary" />
         </div>
         <p className="text-lg text-muted-foreground">
-          تعلّم خوارزمية الترتيب بالإدراج من خلال ترتيب كروت الشدّة
+          Lerne den Sortieralgorithmus durch das Sortieren von Spielkarten
         </p>
       </header>
 
@@ -112,10 +112,10 @@ export const InsertionSortGame = () => {
         <div className="text-center mb-8 animate-scale-in">
           <div className="inline-block p-6 rounded-2xl bg-secondary/20 border border-secondary/30">
             <p className="text-2xl font-bold text-secondary mb-2">
-              🎉 أحسنت! تم ترتيب جميع الكروت
+              🎉 Gut gemacht! Alle Karten sind sortiert
             </p>
             <p className="text-muted-foreground">
-              أكملت الترتيب في {steps} خطوات و {comparisons} مقارنات
+              Du hast die Sortierung in {steps} Schritten und {comparisons} Vergleichen abgeschlossen
             </p>
           </div>
         </div>
@@ -126,7 +126,7 @@ export const InsertionSortGame = () => {
       
       {/* Footer */}
       <footer className="text-center mt-12 text-muted-foreground text-sm">
-        <p>تعلّم الخوارزميات بطريقة ممتعة 🎮</p>
+        <p>Lerne Algorithmen auf spielerische Weise 🎮</p>
       </footer>
     </div>
   );
