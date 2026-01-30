@@ -5,7 +5,6 @@ interface PlayingCardProps {
   suit: 'hearts' | 'diamonds' | 'clubs' | 'spades';
   status: 'sorted' | 'current' | 'unsorted';
   isAnimating?: boolean;
-  animationType?: 'insert' | 'slide' | 'none';
   style?: React.CSSProperties;
 }
 
@@ -28,7 +27,6 @@ export const PlayingCard = ({
   suit,
   status,
   isAnimating = false,
-  animationType = 'none',
   style,
 }: PlayingCardProps) => {
   const suitSymbol = suitSymbols[suit];
@@ -40,38 +38,32 @@ export const PlayingCard = ({
     unsorted: 'card-glow-muted border-muted/30',
   };
 
-  const animationClasses = {
-    insert: 'animate-insert',
-    slide: '',
-    none: '',
-  };
-
   return (
     <div
       className={cn(
         'playing-card',
         statusClasses[status],
-        isAnimating && animationClasses[animationType],
         status === 'current' && 'z-10 scale-105',
-        'hover:scale-110 hover:z-20'
+        'hover:scale-110 hover:z-20',
+        isAnimating && 'animate-insert'
       )}
       style={style}
     >
       {/* Top left corner */}
-      <div className={cn('absolute top-2 left-2 flex flex-col items-center leading-none', suitColor)}>
-        <span className="text-lg sm:text-xl font-bold">{value}</span>
-        <span className="text-sm sm:text-base">{suitSymbol}</span>
+      <div className={cn('absolute top-1.5 left-1.5 sm:top-2 sm:left-2 flex flex-col items-center leading-none', suitColor)}>
+        <span className="text-sm sm:text-lg font-bold">{value}</span>
+        <span className="text-xs sm:text-sm">{suitSymbol}</span>
       </div>
 
       {/* Center suit */}
-      <span className={cn('text-4xl sm:text-5xl md:text-6xl', suitColor)}>
+      <span className={cn('text-3xl sm:text-4xl md:text-5xl', suitColor)}>
         {suitSymbol}
       </span>
 
       {/* Bottom right corner (inverted) */}
-      <div className={cn('absolute bottom-2 right-2 flex flex-col items-center leading-none rotate-180', suitColor)}>
-        <span className="text-lg sm:text-xl font-bold">{value}</span>
-        <span className="text-sm sm:text-base">{suitSymbol}</span>
+      <div className={cn('absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 flex flex-col items-center leading-none rotate-180', suitColor)}>
+        <span className="text-sm sm:text-lg font-bold">{value}</span>
+        <span className="text-xs sm:text-sm">{suitSymbol}</span>
       </div>
 
       {/* Status indicator glow overlay */}

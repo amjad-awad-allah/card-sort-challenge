@@ -203,8 +203,8 @@
   /* Playing Card Base */
   .playing-card {
     @apply relative flex flex-col items-center justify-center;
-    @apply w-20 h-28 sm:w-24 sm:h-32 md:w-28 md:h-36;
-    @apply rounded-xl;
+    @apply w-14 h-20 sm:w-16 sm:h-24 md:w-20 md:h-28;
+    @apply rounded-lg sm:rounded-xl;
     @apply bg-gradient-to-br from-card to-card/95;
     @apply border-2 border-card/80;
     @apply transition-all duration-300 ease-out;

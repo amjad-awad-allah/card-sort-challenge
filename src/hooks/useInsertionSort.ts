@@ -15,13 +15,15 @@ interface SortState {
   comparisons: number;
   isComplete: boolean;
   phase: 'idle' | 'picking' | 'comparing' | 'inserting' | 'complete';
+  keyCard: Card | null;
+  insertPosition: number;
 }
 
 const suits: Card['suit'][] = ['hearts', 'diamonds', 'clubs', 'spades'];
 
 const generateRandomCards = (count: number): Card[] => {
   const values = Array.from({ length: count }, (_, i) => i + 1);
-  // Shuffle values
+  // Shuffle values using Fisher-Yates
   for (let i = values.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [values[i], values[j]] = [values[j], values[i]];
@@ -44,12 +46,13 @@ export const useInsertionSort = (cardCount: number = 7) => {
     comparisons: 0,
     isComplete: false,
     phase: 'idle',
+    keyCard: null,
+    insertPosition: -1,
   });
 
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
-  const keyRef = useRef<number | null>(null);
 
   const initialize = useCallback(() => {
     const cards = generateRandomCards(cardCount);
@@ -62,10 +65,11 @@ export const useInsertionSort = (cardCount: number = 7) => {
       comparisons: 0,
       isComplete: false,
       phase: 'idle',
+      keyCard: null,
+      insertPosition: -1,
     });
     setHasStarted(false);
     setIsAutoPlaying(false);
-    keyRef.current = null;
   }, [cardCount]);
 
   const start = useCallback(() => {
@@ -76,6 +80,7 @@ export const useInsertionSort = (cardCount: number = 7) => {
     setState(prev => ({
       ...prev,
       phase: 'picking',
+      sortedIndex: 0,
     }));
   }, [state.cards.length, initialize]);
 
@@ -83,46 +88,57 @@ export const useInsertionSort = (cardCount: number = 7) => {
     setState(prev => {
       if (prev.isComplete || prev.phase === 'idle') return prev;
 
-      const cards = [...prev.cards];
-      let { sortedIndex, currentIndex, comparingIndex, steps, comparisons, phase } = prev;
+      let { cards, sortedIndex, currentIndex, comparingIndex, steps, comparisons, phase, keyCard, insertPosition } = prev;
+      
+      // Make a copy of cards array
+      const newCards = [...cards];
 
       // Phase: Picking - Start with new card
       if (phase === 'picking') {
         if (currentIndex > cards.length - 1) {
           return { ...prev, isComplete: true, phase: 'complete' };
         }
-        keyRef.current = cards[currentIndex].value;
+        // Store the key card we're going to insert
+        keyCard = { ...cards[currentIndex] };
         comparingIndex = currentIndex - 1;
+        insertPosition = currentIndex;
+        
         return {
           ...prev,
+          keyCard,
           comparingIndex,
+          insertPosition,
           phase: 'comparing',
           steps: steps + 1,
         };
       }
 
-      // Phase: Comparing
+      // Phase: Comparing - Compare and shift
       if (phase === 'comparing') {
-        if (comparingIndex >= 0 && cards[comparingIndex].value > keyRef.current!) {
-          comparisons++;
-          // Shift card right
-          cards[comparingIndex + 1] = { ...cards[comparingIndex] };
+        comparisons++;
+        
+        if (comparingIndex >= 0 && cards[comparingIndex].value > keyCard!.value) {
+          // Shift the card at comparingIndex to the right (to insertPosition)
+          newCards[comparingIndex + 1] = { ...cards[comparingIndex] };
+          insertPosition = comparingIndex;
           comparingIndex--;
-          return {
-            ...prev,
-            cards,
-            comparingIndex,
-            comparisons,
-          };
-        } else {
-          // Found position, insert key
-          const keyCard = prev.cards[currentIndex];
-          cards[comparingIndex + 1] = { ...keyCard, value: keyRef.current! };
           
           return {
             ...prev,
-            cards,
+            cards: newCards,
+            comparingIndex,
+            insertPosition,
+            comparisons,
+          };
+        } else {
+          // Found the correct position, insert the key card
+          newCards[insertPosition] = { ...keyCard! };
+          
+          return {
+            ...prev,
+            cards: newCards,
             phase: 'inserting',
+            comparisons,
           };
         }
       }
@@ -139,6 +155,7 @@ export const useInsertionSort = (cardCount: number = 7) => {
             currentIndex,
             isComplete: true,
             phase: 'complete',
+            keyCard: null,
           };
         }
 
@@ -147,6 +164,8 @@ export const useInsertionSort = (cardCount: number = 7) => {
           sortedIndex,
           currentIndex,
           phase: 'picking',
+          keyCard: null,
+          insertPosition: -1,
         };
       }
 
@@ -163,7 +182,7 @@ export const useInsertionSort = (cardCount: number = 7) => {
     if (isAutoPlaying && !state.isComplete) {
       autoPlayRef.current = setInterval(() => {
         nextStep();
-      }, 600);
+      }, 500);
     } else {
       if (autoPlayRef.current) {
         clearInterval(autoPlayRef.current);
