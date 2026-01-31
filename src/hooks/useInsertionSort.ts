@@ -96,8 +96,8 @@ export const useInsertionSort = (cardCount: number = 7) => {
           return { ...prev, isComplete: true, phase: 'complete' };
         }
         
-        // Store the key card we're going to insert (remove it visually)
-        const newKeyCard = { ...cards[currentIndex] };
+        // Store the key card value (we'll use it for comparison)
+        const newKeyCard = cards[currentIndex];
         
         return {
           ...prev,
@@ -114,9 +114,12 @@ export const useInsertionSort = (cardCount: number = 7) => {
         const newComparisons = comparisons + 1;
         
         if (comparingIndex >= 0 && cards[comparingIndex].value > keyCard!.value) {
-          // Shift: Move the card at comparingIndex one position to the right
+          // Need to shift - swap the comparing card with the one to its right
           const newCards = [...cards];
-          newCards[comparingIndex + 1] = { ...cards[comparingIndex] };
+          // Swap positions: move comparing card to the right
+          const temp = newCards[comparingIndex];
+          newCards[comparingIndex] = newCards[comparingIndex + 1];
+          newCards[comparingIndex + 1] = temp;
           
           return {
             ...prev,
@@ -127,25 +130,23 @@ export const useInsertionSort = (cardCount: number = 7) => {
             phase: 'shifting',
           };
         } else {
-          // Found correct position - insert the key card
-          const newCards = [...cards];
-          newCards[insertPosition] = { ...keyCard! };
-          
+          // Found correct position - key is already in place
           return {
             ...prev,
-            cards: newCards,
             phase: 'inserting',
             comparisons: newComparisons,
           };
         }
       }
 
-      // Phase: Shifting - Visual pause after shift, continue comparing
+      // Phase: Shifting - Continue shifting or insert
       if (phase === 'shifting') {
         if (comparingIndex >= 0 && cards[comparingIndex].value > keyCard!.value) {
-          // Continue shifting
+          // Continue shifting - swap again
           const newCards = [...cards];
-          newCards[comparingIndex + 1] = { ...cards[comparingIndex] };
+          const temp = newCards[comparingIndex];
+          newCards[comparingIndex] = newCards[comparingIndex + 1];
+          newCards[comparingIndex + 1] = temp;
           
           return {
             ...prev,
@@ -154,13 +155,9 @@ export const useInsertionSort = (cardCount: number = 7) => {
             insertPosition: comparingIndex,
           };
         } else {
-          // Done shifting, insert the key card
-          const newCards = [...cards];
-          newCards[insertPosition] = { ...keyCard! };
-          
+          // Done shifting, key is now in correct position
           return {
             ...prev,
-            cards: newCards,
             phase: 'inserting',
           };
         }
