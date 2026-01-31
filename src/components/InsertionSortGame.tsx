@@ -4,6 +4,7 @@ import { TipCard } from './TipCard';
 import { StatsDisplay } from './StatsDisplay';
 import { ConfettiEffect } from './ConfettiEffect';
 import { ExplanationSection } from './ExplanationSection';
+import { StepMessage } from './StepMessage';
 import { useInsertionSort } from '@/hooks/useInsertionSort';
 import { Sparkles } from 'lucide-react';
 
@@ -15,16 +16,22 @@ export const InsertionSortGame = () => {
     isComplete,
     isAutoPlaying,
     hasStarted,
+    phase,
+    keyCard,
     start,
     nextStep,
     toggleAutoPlay,
     restart,
     getCardStatus,
+    stepMessage,
   } = useInsertionSort(7);
 
+  const messageType = phase === 'idle' ? 'picking' : phase;
+
   return (
-    <div className="min-h-screen py-8 px-4">
+    <div className="min-h-screen py-4 sm:py-8 px-2 sm:px-4">
       <ConfettiEffect isActive={isComplete} />
+      <StepMessage message={stepMessage} type={messageType} />
       
       {/* Header */}
       <header className="text-center mb-8 animate-fade-in">
