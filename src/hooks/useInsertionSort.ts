@@ -52,7 +52,14 @@ export const useInsertionSort = (cardCount: number = 7) => {
 
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
+  const [stepMessage, setStepMessage] = useState<string | null>(null);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
+  const messageIdRef = useRef(0);
+
+  const showMessage = useCallback((msg: string) => {
+    messageIdRef.current += 1;
+    setStepMessage(msg + `|${messageIdRef.current}`);
+  }, []);
 
   const initialize = useCallback(() => {
     const cards = generateRandomCards(cardCount);
@@ -70,6 +77,7 @@ export const useInsertionSort = (cardCount: number = 7) => {
     });
     setHasStarted(false);
     setIsAutoPlaying(false);
+    setStepMessage(null);
   }, [cardCount]);
 
   const start = useCallback(() => {
@@ -93,11 +101,13 @@ export const useInsertionSort = (cardCount: number = 7) => {
       // Phase: Picking - Select the key card to insert
       if (phase === 'picking') {
         if (currentIndex > cards.length - 1) {
+          showMessage('🎉 تم ترتيب جميع الكروت بنجاح!');
           return { ...prev, isComplete: true, phase: 'complete' };
         }
         
         // Store the key card value (we'll use it for comparison)
         const newKeyCard = cards[currentIndex];
+        showMessage(`اختيار الكرت ${newKeyCard.value} للترتيب`);
         
         return {
           ...prev,
@@ -121,6 +131,8 @@ export const useInsertionSort = (cardCount: number = 7) => {
           newCards[comparingIndex] = newCards[comparingIndex + 1];
           newCards[comparingIndex + 1] = temp;
           
+          showMessage(`${cards[comparingIndex].value} > ${keyCard!.value} ← تحريك للأمام`);
+          
           return {
             ...prev,
             cards: newCards,
@@ -131,6 +143,8 @@ export const useInsertionSort = (cardCount: number = 7) => {
           };
         } else {
           // Found correct position - key is already in place
+          const reason = comparingIndex < 0 ? 'الموضع الأول' : `${cards[comparingIndex].value} ≤ ${keyCard!.value}`;
+          showMessage(`✅ إدراج في المكان الصحيح: ${reason}`);
           return {
             ...prev,
             phase: 'inserting',
@@ -148,6 +162,8 @@ export const useInsertionSort = (cardCount: number = 7) => {
           newCards[comparingIndex] = newCards[comparingIndex + 1];
           newCards[comparingIndex + 1] = temp;
           
+          showMessage(`${cards[comparingIndex].value} > ${keyCard!.value} ← تحريك للأمام`);
+          
           return {
             ...prev,
             cards: newCards,
@@ -156,6 +172,8 @@ export const useInsertionSort = (cardCount: number = 7) => {
           };
         } else {
           // Done shifting, key is now in correct position
+          const reason = comparingIndex < 0 ? 'الموضع الأول' : `${cards[comparingIndex].value} ≤ ${keyCard!.value}`;
+          showMessage(`✅ إدراج في المكان الصحيح: ${reason}`);
           return {
             ...prev,
             phase: 'inserting',
@@ -193,7 +211,7 @@ export const useInsertionSort = (cardCount: number = 7) => {
 
       return prev;
     });
-  }, []);
+  }, [showMessage]);
 
   const toggleAutoPlay = useCallback(() => {
     setIsAutoPlaying(prev => !prev);
@@ -243,6 +261,7 @@ export const useInsertionSort = (cardCount: number = 7) => {
     ...state,
     isAutoPlaying,
     hasStarted,
+    stepMessage: stepMessage?.split('|')[0] || null,
     start,
     nextStep,
     toggleAutoPlay,
