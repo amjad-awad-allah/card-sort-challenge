@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 interface PlayingCardProps {
   value: number;
   suit: 'hearts' | 'diamonds' | 'clubs' | 'spades';
-  status: 'sorted' | 'current' | 'unsorted';
+  status: 'sorted' | 'current' | 'comparing' | 'shifting' | 'unsorted';
   isAnimating?: boolean;
   style?: React.CSSProperties;
 }
@@ -34,7 +34,9 @@ export const PlayingCard = ({
 
   const statusClasses = {
     sorted: 'card-glow-green border-secondary/50',
-    current: 'card-glow-gold border-primary/50 animate-pulse-card',
+    current: 'card-glow-gold border-primary/50 animate-bounce-in',
+    comparing: 'card-glow-blue border-ring/50 animate-pulse-card',
+    shifting: 'card-glow-orange border-accent/50 animate-shift-right',
     unsorted: 'card-glow-muted border-muted/30',
   };
 
@@ -43,7 +45,8 @@ export const PlayingCard = ({
       className={cn(
         'playing-card',
         statusClasses[status],
-        status === 'current' && 'z-10 scale-105',
+        status === 'current' && 'z-10 scale-110',
+        status === 'comparing' && 'z-10 scale-105',
         'hover:scale-110 hover:z-20',
         isAnimating && 'animate-insert'
       )}
@@ -68,7 +71,13 @@ export const PlayingCard = ({
 
       {/* Status indicator glow overlay */}
       {status === 'current' && (
-        <div className="absolute inset-0 rounded-xl bg-primary/10 pointer-events-none" />
+        <div className="absolute inset-0 rounded-xl bg-primary/20 pointer-events-none animate-pulse" />
+      )}
+      {status === 'comparing' && (
+        <div className="absolute inset-0 rounded-xl bg-ring/20 pointer-events-none" />
+      )}
+      {status === 'shifting' && (
+        <div className="absolute inset-0 rounded-xl bg-accent/20 pointer-events-none" />
       )}
       {status === 'sorted' && (
         <div className="absolute inset-0 rounded-xl bg-secondary/10 pointer-events-none" />

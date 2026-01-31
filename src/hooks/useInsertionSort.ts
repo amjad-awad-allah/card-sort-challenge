@@ -14,7 +14,7 @@ interface SortState {
   steps: number;
   comparisons: number;
   isComplete: boolean;
-  phase: 'idle' | 'picking' | 'comparing' | 'inserting' | 'complete';
+  phase: 'idle' | 'picking' | 'comparing' | 'shifting' | 'inserting' | 'complete';
   keyCard: Card | null;
   insertPosition: number;
 }
@@ -88,84 +88,109 @@ export const useInsertionSort = (cardCount: number = 7) => {
     setState(prev => {
       if (prev.isComplete || prev.phase === 'idle') return prev;
 
-      let { cards, sortedIndex, currentIndex, comparingIndex, steps, comparisons, phase, keyCard, insertPosition } = prev;
-      
-      // Make a copy of cards array
-      const newCards = [...cards];
+      const { cards, sortedIndex, currentIndex, comparingIndex, steps, comparisons, phase, keyCard, insertPosition } = prev;
 
-      // Phase: Picking - Start with new card
+      // Phase: Picking - Select the key card to insert
       if (phase === 'picking') {
         if (currentIndex > cards.length - 1) {
           return { ...prev, isComplete: true, phase: 'complete' };
         }
-        // Store the key card we're going to insert
-        keyCard = { ...cards[currentIndex] };
-        comparingIndex = currentIndex - 1;
-        insertPosition = currentIndex;
+        
+        // Store the key card we're going to insert (remove it visually)
+        const newKeyCard = { ...cards[currentIndex] };
         
         return {
           ...prev,
-          keyCard,
-          comparingIndex,
-          insertPosition,
+          keyCard: newKeyCard,
+          comparingIndex: currentIndex - 1,
+          insertPosition: currentIndex,
           phase: 'comparing',
           steps: steps + 1,
         };
       }
 
-      // Phase: Comparing - Compare and shift
+      // Phase: Comparing - Compare key card with sorted portion
       if (phase === 'comparing') {
-        comparisons++;
+        const newComparisons = comparisons + 1;
         
         if (comparingIndex >= 0 && cards[comparingIndex].value > keyCard!.value) {
-          // Shift the card at comparingIndex to the right (to insertPosition)
+          // Shift: Move the card at comparingIndex one position to the right
+          const newCards = [...cards];
           newCards[comparingIndex + 1] = { ...cards[comparingIndex] };
-          insertPosition = comparingIndex;
-          comparingIndex--;
           
           return {
             ...prev,
             cards: newCards,
-            comparingIndex,
-            insertPosition,
-            comparisons,
+            comparingIndex: comparingIndex - 1,
+            insertPosition: comparingIndex,
+            comparisons: newComparisons,
+            phase: 'shifting',
           };
         } else {
-          // Found the correct position, insert the key card
+          // Found correct position - insert the key card
+          const newCards = [...cards];
           newCards[insertPosition] = { ...keyCard! };
           
           return {
             ...prev,
             cards: newCards,
             phase: 'inserting',
-            comparisons,
+            comparisons: newComparisons,
           };
         }
       }
 
-      // Phase: Inserting - Move to next card
-      if (phase === 'inserting') {
-        sortedIndex = currentIndex;
-        currentIndex++;
-        
-        if (currentIndex > cards.length - 1) {
+      // Phase: Shifting - Visual pause after shift, continue comparing
+      if (phase === 'shifting') {
+        if (comparingIndex >= 0 && cards[comparingIndex].value > keyCard!.value) {
+          // Continue shifting
+          const newCards = [...cards];
+          newCards[comparingIndex + 1] = { ...cards[comparingIndex] };
+          
           return {
             ...prev,
-            sortedIndex,
-            currentIndex,
+            cards: newCards,
+            comparingIndex: comparingIndex - 1,
+            insertPosition: comparingIndex,
+          };
+        } else {
+          // Done shifting, insert the key card
+          const newCards = [...cards];
+          newCards[insertPosition] = { ...keyCard! };
+          
+          return {
+            ...prev,
+            cards: newCards,
+            phase: 'inserting',
+          };
+        }
+      }
+
+      // Phase: Inserting - Finalize and move to next card
+      if (phase === 'inserting') {
+        const newSortedIndex = currentIndex;
+        const newCurrentIndex = currentIndex + 1;
+        
+        if (newCurrentIndex > cards.length - 1) {
+          return {
+            ...prev,
+            sortedIndex: newSortedIndex,
+            currentIndex: newCurrentIndex,
             isComplete: true,
             phase: 'complete',
             keyCard: null,
+            insertPosition: -1,
           };
         }
 
         return {
           ...prev,
-          sortedIndex,
-          currentIndex,
+          sortedIndex: newSortedIndex,
+          currentIndex: newCurrentIndex,
           phase: 'picking',
           keyCard: null,
           insertPosition: -1,
+          comparingIndex: -1,
         };
       }
 
@@ -209,12 +234,13 @@ export const useInsertionSort = (cardCount: number = 7) => {
     initialize();
   }, [initialize]);
 
-  const getCardStatus = useCallback((index: number): 'sorted' | 'current' | 'unsorted' => {
+  const getCardStatus = useCallback((index: number): 'sorted' | 'current' | 'comparing' | 'shifting' | 'unsorted' => {
     if (state.phase === 'complete') return 'sorted';
-    if (index === state.currentIndex) return 'current';
+    if (index === state.insertPosition && state.keyCard) return 'current';
+    if (index === state.comparingIndex && (state.phase === 'comparing' || state.phase === 'shifting')) return 'comparing';
     if (index <= state.sortedIndex) return 'sorted';
     return 'unsorted';
-  }, [state.sortedIndex, state.currentIndex, state.phase]);
+  }, [state.sortedIndex, state.insertPosition, state.comparingIndex, state.phase, state.keyCard]);
 
   return {
     ...state,
