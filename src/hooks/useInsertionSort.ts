@@ -101,13 +101,13 @@ export const useInsertionSort = (cardCount: number = 7) => {
       // Phase: Picking - Select the key card to insert
       if (phase === 'picking') {
         if (currentIndex > cards.length - 1) {
-          showMessage('🎉 تم ترتيب جميع الكروت بنجاح!');
+          showMessage('🎉 Alle Karten erfolgreich sortiert!');
           return { ...prev, isComplete: true, phase: 'complete' };
         }
         
         // Store the key card value (we'll use it for comparison)
         const newKeyCard = cards[currentIndex];
-        showMessage(`اختيار الكرت ${newKeyCard.value} للترتيب`);
+        showMessage(`Karte ${newKeyCard.value} zum Sortieren ausgewählt`);
         
         return {
           ...prev,
@@ -131,7 +131,7 @@ export const useInsertionSort = (cardCount: number = 7) => {
           newCards[comparingIndex] = newCards[comparingIndex + 1];
           newCards[comparingIndex + 1] = temp;
           
-          showMessage(`${cards[comparingIndex].value} > ${keyCard!.value} ← تحريك للأمام`);
+          showMessage(`${cards[comparingIndex].value} > ${keyCard!.value} → nach rechts verschieben`);
           
           return {
             ...prev,
@@ -143,8 +143,8 @@ export const useInsertionSort = (cardCount: number = 7) => {
           };
         } else {
           // Found correct position - key is already in place
-          const reason = comparingIndex < 0 ? 'الموضع الأول' : `${cards[comparingIndex].value} ≤ ${keyCard!.value}`;
-          showMessage(`✅ إدراج في المكان الصحيح: ${reason}`);
+          const reason = comparingIndex < 0 ? 'erste Position' : `${cards[comparingIndex].value} ≤ ${keyCard!.value}`;
+          showMessage(`✅ Richtige Position gefunden: ${reason}`);
           return {
             ...prev,
             phase: 'inserting',
@@ -162,7 +162,7 @@ export const useInsertionSort = (cardCount: number = 7) => {
           newCards[comparingIndex] = newCards[comparingIndex + 1];
           newCards[comparingIndex + 1] = temp;
           
-          showMessage(`${cards[comparingIndex].value} > ${keyCard!.value} ← تحريك للأمام`);
+          showMessage(`${cards[comparingIndex].value} > ${keyCard!.value} → nach rechts verschieben`);
           
           return {
             ...prev,
@@ -172,8 +172,8 @@ export const useInsertionSort = (cardCount: number = 7) => {
           };
         } else {
           // Done shifting, key is now in correct position
-          const reason = comparingIndex < 0 ? 'الموضع الأول' : `${cards[comparingIndex].value} ≤ ${keyCard!.value}`;
-          showMessage(`✅ إدراج في المكان الصحيح: ${reason}`);
+          const reason = comparingIndex < 0 ? 'erste Position' : `${cards[comparingIndex].value} ≤ ${keyCard!.value}`;
+          showMessage(`✅ Richtige Position gefunden: ${reason}`);
           return {
             ...prev,
             phase: 'inserting',
