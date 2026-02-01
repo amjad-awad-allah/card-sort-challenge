@@ -5,6 +5,12 @@ import { StatsDisplay } from './StatsDisplay';
 import { ConfettiEffect } from './ConfettiEffect';
 import { ExplanationSection } from './ExplanationSection';
 import { StepMessage } from './StepMessage';
+import { IntroSection } from './IntroSection';
+import { PseudocodeSection } from './PseudocodeSection';
+import { ComplexityTable } from './ComplexityTable';
+import { ComparisonTable } from './ComparisonTable';
+import { ConclusionSection } from './ConclusionSection';
+import { LegendSection } from './LegendSection';
 import { useInsertionSort } from '@/hooks/useInsertionSort';
 import { Sparkles } from 'lucide-react';
 
@@ -17,7 +23,8 @@ export const InsertionSortGame = () => {
     isAutoPlaying,
     hasStarted,
     phase,
-    keyCard,
+    currentIndex,
+    comparingIndex,
     start,
     nextStep,
     toggleAutoPlay,
@@ -47,10 +54,16 @@ export const InsertionSortGame = () => {
         </p>
       </header>
 
+      {/* Intro Section */}
+      <IntroSection />
+
       {/* Tip Card */}
       <div className="mb-8">
         <TipCard />
       </div>
+
+      {/* Legend Section */}
+      <LegendSection />
 
       {/* Stats Display */}
       {hasStarted && (
@@ -114,6 +127,17 @@ export const InsertionSortGame = () => {
         />
       </div>
 
+      {/* Pseudocode Section - Shows during game */}
+      {hasStarted && (
+        <div className="animate-fade-in">
+          <PseudocodeSection 
+            currentPhase={phase} 
+            currentIndex={currentIndex}
+            comparingIndex={comparingIndex}
+          />
+        </div>
+      )}
+
       {/* Success Message */}
       {isComplete && (
         <div className="text-center mb-8 animate-scale-in">
@@ -130,6 +154,15 @@ export const InsertionSortGame = () => {
 
       {/* Explanation Section */}
       <ExplanationSection />
+
+      {/* Complexity Table */}
+      <ComplexityTable />
+
+      {/* Comparison Table */}
+      <ComparisonTable />
+
+      {/* Conclusion Section */}
+      <ConclusionSection />
       
       {/* Footer */}
       <footer className="text-center mt-12 text-muted-foreground text-sm">
