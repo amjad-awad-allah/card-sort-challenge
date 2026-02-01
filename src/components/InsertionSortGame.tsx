@@ -11,6 +11,7 @@ import { ComplexityTable } from './ComplexityTable';
 import { ComparisonTable } from './ComparisonTable';
 import { ConclusionSection } from './ConclusionSection';
 import { LegendSection } from './LegendSection';
+import { InitialStateExplanation } from './InitialStateExplanation';
 import { useInsertionSort } from '@/hooks/useInsertionSort';
 import { Sparkles } from 'lucide-react';
 
@@ -25,6 +26,8 @@ export const InsertionSortGame = () => {
     phase,
     currentIndex,
     comparingIndex,
+    sortedIndex,
+    keyCard,
     start,
     nextStep,
     toggleAutoPlay,
@@ -32,6 +35,11 @@ export const InsertionSortGame = () => {
     getCardStatus,
     stepMessage,
   } = useInsertionSort(7);
+
+  // Get comparing card value for pseudocode display
+  const comparingValue = comparingIndex >= 0 && comparingIndex < cards.length 
+    ? cards[comparingIndex].value 
+    : undefined;
 
   const messageType = phase === 'idle' ? 'picking' : phase;
 
@@ -64,6 +72,14 @@ export const InsertionSortGame = () => {
 
       {/* Legend Section */}
       <LegendSection />
+
+      {/* Initial State Explanation */}
+      <InitialStateExplanation 
+        hasStarted={hasStarted}
+        isComplete={isComplete}
+        sortedCount={sortedIndex}
+        totalCards={cards.length}
+      />
 
       {/* Stats Display */}
       {hasStarted && (
@@ -134,6 +150,8 @@ export const InsertionSortGame = () => {
             currentPhase={phase} 
             currentIndex={currentIndex}
             comparingIndex={comparingIndex}
+            keyValue={keyCard?.value}
+            comparingValue={comparingValue}
           />
         </div>
       )}
